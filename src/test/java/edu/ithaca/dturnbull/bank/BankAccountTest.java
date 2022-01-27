@@ -14,12 +14,46 @@ class BankAccountTest {
     }
 
     @Test
-    void withdrawTest() throws InsufficientFundsException{
+    void withdrawTestDoug() throws InsufficientFundsException{
+    // case : amount greater than balance
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
         bankAccount.withdraw(100);
-
         assertEquals(100, bankAccount.getBalance(), 0.001);
         assertThrows(InsufficientFundsException.class, () -> bankAccount.withdraw(300));
+    }
+
+    @Test
+    void withdrawTestNegative() throws InsufficientFundsException{
+    // case : negative withdraw amount
+        BankAccount bankAccount = new BankAccount("a@b.com", 200);
+        bankAccount.withdraw(-100);
+        assertEquals(200, bankAccount.getBalance(), 0.001);
+    }
+
+    @Test
+    void withdrawTestZero() throws InsufficientFundsException{
+    // case : withdraw nothing
+        BankAccount bankAccount = new BankAccount("a@b.com", 200);
+        bankAccount.withdraw(0);
+        assertEquals(200, bankAccount.getBalance(), 0.001);
+    }
+
+    @Test
+    void withdrawTestToZero() throws InsufficientFundsException{
+    // case : fully deplete account
+        BankAccount bankAccount = new BankAccount("a@b.com", 200);
+        bankAccount.withdraw(200);
+        assertEquals(0, bankAccount.getBalance(), 0.001);
+    }
+
+    @Test
+    void withdrawTestToCents() throws InsufficientFundsException{
+    // case : leave cents in the account
+        BankAccount bankAccount = new BankAccount("a@b.com", 200);
+        bankAccount.withdraw(0.01);
+        assertEquals(199.99, bankAccount.getBalance(), 0.001);
+        bankAccount.withdraw(199.98);
+        assertEquals(0.01, bankAccount.getBalance(), 0.001);
     }
 
     @Test
