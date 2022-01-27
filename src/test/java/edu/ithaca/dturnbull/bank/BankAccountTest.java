@@ -8,8 +8,8 @@ class BankAccountTest {
 
     @Test
     void getBalanceTest() {
+    // doesn't need test cases since solely reflects effects of other methods 
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
-
         assertEquals(200, bankAccount.getBalance(), 0.001);
     }
 
