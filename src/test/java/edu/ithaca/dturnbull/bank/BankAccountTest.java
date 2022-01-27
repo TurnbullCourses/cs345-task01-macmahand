@@ -33,31 +33,31 @@ class BankAccountTest {
     @Test
     void isEmailValidTestBadPrefix(){
         assertFalse( BankAccount.isEmailValid("abc..def@mail.com"));       // too many periods
-        assertFalse( BankAccount.isEmailValid(".abc@mail.com"));           // bad character
-        assertFalse( BankAccount.isEmailValid("abc#def@mail.com	"));       // bad character
+        assertFalse( BankAccount.isEmailValid(".abc@mail.com"));           // can't start with period
+        assertFalse( BankAccount.isEmailValid("abc#def@mail.com	"));       // no # allowed
     }
 
     @Test
     void isEmailValidTestGoodPrefix(){
         assertTrue( BankAccount.isEmailValid("abc-d@mail.com"));           
         assertTrue( BankAccount.isEmailValid("abc.def@mail.com"));           
-        assertTrue( BankAccount.isEmailValid("abc@mail.com"));           
-        assertTrue( BankAccount.isEmailValid("abc_def@mail.com"));           
+        assertTrue( BankAccount.isEmailValid("abc@mail.com"));             
+        assertTrue( BankAccount.isEmailValid("abc_def@mail.com"));         // _ is an allowed character  
     }
 
     @Test
     void isEmailValidTestBadDomain(){
-        assertFalse( BankAccount.isEmailValid("abc.def@mail.c"));           // domain too short
-        assertFalse( BankAccount.isEmailValid("abc.def@mail#archive.com")); // invalid characters
-        assertFalse( BankAccount.isEmailValid("abc.def@mail"));             // missing domain portion
-        assertFalse( BankAccount.isEmailValid("abc.def@mail..com"));        // too many domain periods
+        assertFalse( BankAccount.isEmailValid("abc.def@mail.c"));           // domain is short
+        assertFalse( BankAccount.isEmailValid("abc.def@mail#archive.com")); // no # allowed
+        assertFalse( BankAccount.isEmailValid("abc.def@mail"));             // no domain
+        assertFalse( BankAccount.isEmailValid("abc.def@mail..com"));        // too many periods
     }
 
     @Test
     void isEmailValidTestGoodDomain(){
-        assertTrue( BankAccount.isEmailValid("abc.def@mail.cc"));           
-        assertTrue( BankAccount.isEmailValid("abc.def@mail-archive.com"));           
-        assertTrue( BankAccount.isEmailValid("abc.def@mail.org"));           
+        assertTrue( BankAccount.isEmailValid("abc.def@mail.cc"));           // domain is >1     
+        assertTrue( BankAccount.isEmailValid("abc.def@mail-archive.com"));  
+        assertTrue( BankAccount.isEmailValid("abc.def@mail.org"));          // .org is an allowed domain 
         assertTrue( BankAccount.isEmailValid("abc.def@mail.com"));         
         
     }
