@@ -23,10 +23,10 @@ class BankAccountTest {
     }
 
     @Test
-    void withdrawTestNegative() throws InsufficientFundsException{
+    void withdrawTestNegative() throws InsufficientFundsException, IllegalArgumentException{
     // case : negative withdraw amount
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
-        bankAccount.withdraw(-100);
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.withdraw(-100));
         assertEquals(200, bankAccount.getBalance(), 0.001);
     }
 
