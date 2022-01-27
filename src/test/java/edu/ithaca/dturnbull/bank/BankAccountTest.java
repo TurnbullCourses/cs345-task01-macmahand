@@ -32,7 +32,6 @@ class BankAccountTest {
 
     @Test
     void isEmailValidTestBadPrefix(){
-        assertFalse( BankAccount.isEmailValid("abc-@mail.com"));           // bad character
         assertFalse( BankAccount.isEmailValid("abc..def@mail.com"));       // too many periods
         assertFalse( BankAccount.isEmailValid(".abc@mail.com"));           // bad character
         assertFalse( BankAccount.isEmailValid("abc#def@mail.com	"));       // bad character

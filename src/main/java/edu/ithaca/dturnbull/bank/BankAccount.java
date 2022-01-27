@@ -1,4 +1,5 @@
 package edu.ithaca.dturnbull.bank;
+import java.util.regex.Pattern;
 
 public class BankAccount {
 
@@ -40,11 +41,14 @@ public class BankAccount {
 
 
     public static boolean isEmailValid(String email){
-        if (email.indexOf('@') == -1){
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+                            "[a-zA-Z0-9_+&*-]+)*@" +
+                            "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                            "A-Z]{2,7}$";
+                              
+        Pattern pat = Pattern.compile(emailRegex);
+        if (email == null)
             return false;
-        }
-        else {
-            return true;
-        }
+        return pat.matcher(email).matches();
     }
 }
