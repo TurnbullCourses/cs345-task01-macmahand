@@ -54,6 +54,14 @@ public class BankAccount {
     }
 
     /**
+     * @post increases the balance by amount if amount is valid
+     * <li>If amount is not valid, throw IllegalArgumentException.</li>
+     */
+    public void deposit (double amount) throws IllegalArgumentException{
+        // TODO : implement deposit()
+    }
+
+    /**
      * <li>If amount is negative, return false.</li>
      * <li>If amount is has more than two decimal points, return false.</li>
      */
