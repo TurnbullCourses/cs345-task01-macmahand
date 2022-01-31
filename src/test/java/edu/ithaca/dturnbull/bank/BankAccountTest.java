@@ -67,10 +67,29 @@ class BankAccountTest {
         assertEquals(999.99, bankAccount.getBalance(), 0.001);
         assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(-0.01)); // EC : negative deposit
         assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(5.012)); // EC : too many decimals deposit
-        
     }
 
+    @Test
+    void transferTest() throws IllegalArgumentException, InsufficientFundsException{
+        BankAccount account1 = new BankAccount("a@b.com", 200);
+        BankAccount account2 = new BankAccount("a@b.com", 0);
 
+        account1.transfer(200, account2);  // EC : valid transfer
+        assertEquals(0, account1.getBalance(), 0.001);
+        assertEquals(200, account2.getBalance(), 0.001);
+
+        assertThrows(InsufficientFundsException.class, () -> account2.transfer(300, account1)); // EC : transfer more than balance
+        assertEquals(0, account1.getBalance(), 0.001);
+        assertEquals(200, account2.getBalance(), 0.001);
+
+        assertThrows(InsufficientFundsException.class, () -> account2.transfer(-5, account1)); // EC : invalid amount
+        assertEquals(0, account1.getBalance(), 0.001);
+        assertEquals(200, account2.getBalance(), 0.001);
+
+        account2.transfer(5.25, account1);  // EC : valid transfer with decimals
+        assertEquals(5.25, account1.getBalance(), 0.001);
+        assertEquals(194.75, account2.getBalance(), 0.001);
+    }
 
     @Test
     void isAmountValidTest() {
@@ -82,8 +101,6 @@ class BankAccountTest {
         assertTrue(BankAccount.isAmountValid(0));       // EC : zero
         assertTrue(BankAccount.isAmountValid(10.00000));  // EC : zero
     }
-
-
 
     @Test
     void isEmailValidTestDoug(){

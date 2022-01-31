@@ -66,6 +66,15 @@ public class BankAccount {
     }
 
     /**
+     * @post decreases amount from balance and deposits to another account's balance
+     * <li>If amount is not valid, throw IllegalArgumentException.</li>
+     * <li>If transferee is not valid, throw IllegalArgumentException.</li>
+     */
+    public void transfer (double amount, BankAccount transfereeAccount) throws IllegalArgumentException{
+        
+    }
+
+    /**
      * <li>If amount is negative, return false.</li>
      * <li>If amount is has more than two decimal points, return false.</li>
      */
