@@ -73,6 +73,7 @@ class BankAccountTest {
     void transferTest() throws IllegalArgumentException, InsufficientFundsException{
         BankAccount account1 = new BankAccount("a@b.com", 200);
         BankAccount account2 = new BankAccount("a@b.com", 0);
+        BankAccount account3 = null;
 
         account1.transfer(200, account2);  // EC : valid transfer
         assertEquals(0, account1.getBalance(), 0.001);
@@ -82,11 +83,15 @@ class BankAccountTest {
         assertEquals(0, account1.getBalance(), 0.001);
         assertEquals(200, account2.getBalance(), 0.001);
 
-        assertThrows(InsufficientFundsException.class, () -> account2.transfer(-5, account1)); // EC : invalid amount
+        assertThrows(IllegalArgumentException.class, () -> account2.transfer(-5, account1)); // EC : invalid amount
         assertEquals(0, account1.getBalance(), 0.001);
         assertEquals(200, account2.getBalance(), 0.001);
 
         account2.transfer(5.25, account1);  // EC : valid transfer with decimals
+        assertEquals(5.25, account1.getBalance(), 0.001);
+        assertEquals(194.75, account2.getBalance(), 0.001);
+
+        assertThrows(IllegalArgumentException.class, () -> account1.transfer(1, account3)); // EC : invalid account
         assertEquals(5.25, account1.getBalance(), 0.001);
         assertEquals(194.75, account2.getBalance(), 0.001);
     }

@@ -70,8 +70,13 @@ public class BankAccount {
      * <li>If amount is not valid, throw IllegalArgumentException.</li>
      * <li>If transferee is not valid, throw IllegalArgumentException.</li>
      */
-    public void transfer (double amount, BankAccount transfereeAccount) throws IllegalArgumentException{
-        
+    public void transfer (double amount, BankAccount transfereeAccount) throws IllegalArgumentException, InsufficientFundsException{
+        if (transfereeAccount==null) {
+            throw new IllegalArgumentException("Transferee account is invalid.");
+        } else {
+            this.withdraw(amount);
+            transfereeAccount.deposit(amount);
+        }
     }
 
     /**
