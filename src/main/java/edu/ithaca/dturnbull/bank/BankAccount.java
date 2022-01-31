@@ -49,10 +49,16 @@ public class BankAccount {
      * <li>If amount is has more than two decimal points, return false.</li>
      */
     public static boolean isAmountValid(double amount) {
-        return false;
+        if (amount < 0) {
+            return false;
+        } 
+        String amountStr = Double.toString(Math.abs(amount));
+        int integerPlaces = amountStr.indexOf('.');
+        if (((amountStr.length() - integerPlaces - 1) > 2) && (amount%1!=0))  {
+            return false;
+        }
+        return true;
     }
-
-
 
     public static boolean isEmailValid(String email){
         if (hasAdjacentSymbols(email)) {
