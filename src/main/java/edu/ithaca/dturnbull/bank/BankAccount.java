@@ -58,7 +58,11 @@ public class BankAccount {
      * <li>If amount is not valid, throw IllegalArgumentException.</li>
      */
     public void deposit (double amount) throws IllegalArgumentException{
-        // TODO : implement deposit()
+        if (isAmountValid(amount)) {
+            this.balance += amount;
+        } else {
+            throw new IllegalArgumentException("Deposit amount is invalid.");
+        }
     }
 
     /**

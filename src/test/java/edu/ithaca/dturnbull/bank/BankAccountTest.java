@@ -64,7 +64,7 @@ class BankAccountTest {
         bankAccount.deposit(0.01); // EC : valid
         assertEquals(200.01, bankAccount.getBalance(), 0.001);
         bankAccount.deposit(799.98); // EC : edge case
-        assertEquals(999, bankAccount.getBalance(), 0.001);
+        assertEquals(999.99, bankAccount.getBalance(), 0.001);
         assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(-0.01)); // EC : negative deposit
         assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(5.012)); // EC : too many decimals deposit
         
