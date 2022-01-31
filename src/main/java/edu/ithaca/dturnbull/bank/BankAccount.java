@@ -44,8 +44,21 @@ public class BankAccount {
         }
     }
 
+    /**
+     * <li>If amount is negative, return false.</li>
+     * <li>If amount is has more than two decimal points, return false.</li>
+     */
+    public static boolean isAmountValid(double amount) {
+        return false;
+    }
+
+
 
     public static boolean isEmailValid(String email){
+        if (hasAdjacentSymbols(email)) {
+            return false;
+        }
+
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
                             "[a-zA-Z0-9_+&*-]+)*@" +
                             "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
@@ -55,5 +68,29 @@ public class BankAccount {
         if (email == null)
             return false;
         return pat.matcher(email).matches();
+    }
+
+    private static boolean hasAdjacentSymbols(String email) {
+        for (int i=0; i<email.length(); i++) {
+            if (!isLetter(email.codePointAt(i))) { // if char at i is not letter
+                if (i==0 || i==email.length()-1) { // bad char at first or last letter
+                    return true;
+                }
+                if (!isLetter(email.codePointAt(i+1))) { // if next char is also not letter
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean isLetter(int codePoint) {
+        if (codePoint >= 65 && codePoint <= 90) { // if codePoint is capital letter
+            return true;
+        }
+        if (codePoint >= 97 && codePoint <= 122) { // if codePoint is lowercase letter
+            return true;
+        }
+        return false;
     }
 }

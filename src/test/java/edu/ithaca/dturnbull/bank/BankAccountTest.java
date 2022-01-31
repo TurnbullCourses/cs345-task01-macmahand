@@ -57,6 +57,18 @@ class BankAccountTest {
     }
 
     @Test
+    void isAmountValidTest() {
+        assertTrue(BankAccount.isAmountValid(200));     // EC : middle
+        assertTrue(BankAccount.isAmountValid(10.99));   // EC : middle
+        assertFalse(BankAccount.isAmountValid(-5));     // EC : negative
+        assertFalse(BankAccount.isAmountValid(10.999)); // EC : too many decimals
+        assertTrue(BankAccount.isAmountValid(0));       // EC : zero
+        assertTrue(BankAccount.isAmountValid(10.000));  // EC : zero
+    }
+
+
+
+    @Test
     void isEmailValidTestDoug(){
         assertTrue(BankAccount.isEmailValid( "a@b.com"));   // valid email address
         assertFalse( BankAccount.isEmailValid(""));         // empty string
@@ -83,8 +95,8 @@ class BankAccountTest {
     void isEmailValidTestPrefix(){
     // tests prefix
         assertTrue( BankAccount.isEmailValid("abc.def@mail.com"));           
-        assertTrue( BankAccount.isEmailValid(".abcdef@mail.com"));             
-        assertTrue( BankAccount.isEmailValid("abcdef.@mail.com"));             
+        assertFalse( BankAccount.isEmailValid(".abcdef@mail.com"));             
+        assertFalse( BankAccount.isEmailValid("abcdef.@mail.com"));             
         assertFalse( BankAccount.isEmailValid("@mail.com"));         // no prefix     
     }
 
