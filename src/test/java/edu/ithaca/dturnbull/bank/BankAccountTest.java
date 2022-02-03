@@ -8,7 +8,6 @@ class BankAccountTest {
 
     @Test
     void getBalanceTest() {
-    // doesn't need test cases since solely reflects effects of other methods 
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
         assertEquals(200, bankAccount.getBalance(), 0.001);
     }
@@ -98,13 +97,15 @@ class BankAccountTest {
 
     @Test
     void isAmountValidTest() {
-        assertTrue(BankAccount.isAmountValid(200));     // EC : middle
-        assertTrue(BankAccount.isAmountValid(10.99));   // EC : middle
-        assertTrue(BankAccount.isAmountValid(10.5));   // EC : middle
-        assertFalse(BankAccount.isAmountValid(-5));     // EC : negative
-        assertFalse(BankAccount.isAmountValid(10.999)); // EC : too many decimals
-        assertTrue(BankAccount.isAmountValid(0));       // EC : zero
-        assertTrue(BankAccount.isAmountValid(10.00000));  // EC : zero
+        assertTrue(BankAccount.isAmountValid(200));         // EC : middle
+        assertTrue(BankAccount.isAmountValid(10.99));       // EC : middle
+        assertTrue(BankAccount.isAmountValid(10.5));        // EC : middle
+        assertTrue(BankAccount.isAmountValid(0));           // EC : zero
+        assertFalse(BankAccount.isAmountValid(-5));         // EC : negative
+        assertTrue(BankAccount.isAmountValid(10.00000));    // EC : zero
+        assertTrue(BankAccount.isAmountValid(10.070));      // EC : ignore 0 thousandth
+        assertFalse(BankAccount.isAmountValid(10.0104));    // EC : 0 thousandth but sneaky 4 after it
+        assertFalse(BankAccount.isAmountValid(10.999));     // EC : too many decimals
     }
 
     @Test
@@ -116,37 +117,37 @@ class BankAccountTest {
     @Test
     // tests @ presence in string
     void isEmailValidTestAts(){
-        assertTrue( BankAccount.isEmailValid("abcdef@mail.com"));       // 1 @ symbol
-        assertFalse( BankAccount.isEmailValid("abc@@mail.com"));        // 2 @ symbol
-        assertFalse( BankAccount.isEmailValid("abcmail.com"));          // no @ symbol
+        assertTrue( BankAccount.isEmailValid("abcdef@mail.com"));   // 1 @ symbol
+        assertFalse( BankAccount.isEmailValid("abc@@mail.com"));    // 2 @ symbol
+        assertFalse( BankAccount.isEmailValid("abcmail.com"));      // no @ symbol
     }
 
     @Test
     // emailwide invalid characters
     void isEmailValidTestBadChars(){
-        assertFalse( BankAccount.isEmailValid("abc..def@mail.com"));       // too many periods
-        assertFalse( BankAccount.isEmailValid("abc#def@mail.com	"));       // no # allowed
-        assertFalse( BankAccount.isEmailValid("abc?def@mail.com	"));       // no ? allowed
-        assertFalse( BankAccount.isEmailValid("abc+def@mail.com	"));       // no symbols allowed
+        assertFalse( BankAccount.isEmailValid("abc..def@mail.com"));    // too many periods
+        assertFalse( BankAccount.isEmailValid("abc#def@mail.com	"));    // no # allowed
+        assertFalse( BankAccount.isEmailValid("abc?def@mail.com	"));    // no ? allowed
+        assertFalse( BankAccount.isEmailValid("abc+def@mail.com	"));    // no symbols allowed
     }
 
     @Test
     void isEmailValidTestPrefix(){
     // tests prefix
-        assertTrue( BankAccount.isEmailValid("abc.def@mail.com"));           
-        assertFalse( BankAccount.isEmailValid(".abcdef@mail.com"));             
-        assertFalse( BankAccount.isEmailValid("abcdef.@mail.com"));             
-        assertFalse( BankAccount.isEmailValid("@mail.com"));         // no prefix     
+        assertTrue( BankAccount.isEmailValid("abc.def@mail.com"));  // valid location of symbol in prefix       
+        assertFalse( BankAccount.isEmailValid(".abcdef@mail.com")); // invalid location of symbol in domain          
+        assertFalse( BankAccount.isEmailValid("abcdef.@mail.com")); // invalid location of symbol in domain        
+        assertFalse( BankAccount.isEmailValid("@mail.com"));        // no prefix     
     }
 
     @Test
     void isEmailValidTestDomain(){
     // tests domain
-        assertFalse( BankAccount.isEmailValid("abcdef@mail.c"));           // domain is too short
+        assertFalse( BankAccount.isEmailValid("abcdef@mail.c"));            // domain is too short
         assertTrue( BankAccount.isEmailValid("abc.def@mail.cc"));           // domain is > 1      
-        assertTrue( BankAccount.isEmailValid("abc.def@mail-archive.com"));  
-        assertFalse( BankAccount.isEmailValid("abc.def@-mailarchive.com"));  
-        assertFalse( BankAccount.isEmailValid("abc.def@mailarchive-.com"));  
+        assertTrue( BankAccount.isEmailValid("abc.def@mail-archive.com"));  // valid location of symbol in domain
+        assertFalse( BankAccount.isEmailValid("abc.def@-mailarchive.com")); // invalid location of symbol in domain
+        assertFalse( BankAccount.isEmailValid("abc.def@mailarchive-.com")); // invalid location of symbol in domain
         assertTrue( BankAccount.isEmailValid("abc.def@mail.org"));          // .org is an allowed domain 
         assertFalse( BankAccount.isEmailValid("abc.def@.org"));             // no domain 
         assertFalse( BankAccount.isEmailValid("abc.def@mail"));             // no domain extension
@@ -161,8 +162,8 @@ class BankAccountTest {
         assertEquals(200, bankAccount.getBalance(), 0.001);
         //check for exception thrown correctly
         assertThrows(IllegalArgumentException.class, ()-> new BankAccount("", 100));
-        assertThrows(IllegalArgumentException.class, () -> new BankAccount("a@b.com", -200));
-        assertThrows(IllegalArgumentException.class, () -> new BankAccount("a@b.com", 100.567));
+        assertThrows(IllegalArgumentException.class, () -> new BankAccount("a@b.com", -200));       // correct amountValid failure
+        assertThrows(IllegalArgumentException.class, () -> new BankAccount("a@b.com", 100.567));    // correct amountValid failure
 
     }
 

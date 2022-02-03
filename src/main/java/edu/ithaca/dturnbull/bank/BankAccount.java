@@ -7,7 +7,7 @@ public class BankAccount {
     private double balance;
 
     /**
-     * @throws IllegalArgumentException if email is invalid
+     * @throws IllegalArgumentException if email or startingBalance is invalid
      */
     public BankAccount(String email, double startingBalance){
         boolean emailValid = false;
@@ -41,7 +41,7 @@ public class BankAccount {
      * <li>If amount is not valid, throw IllegalArgumentException.</li>
      * <li>If amount is larger than balance, throws InsufficientFundsException.</li>
      */
-    public void withdraw (double amount) throws InsufficientFundsException, IllegalArgumentException{
+    public void withdraw (double amount) throws InsufficientFundsException, IllegalArgumentException {
         if (!isAmountValid(amount)) {
             throw new IllegalArgumentException("Amount is not valid.");
         }
@@ -82,13 +82,17 @@ public class BankAccount {
     /**
      * <li>If amount is negative, return false.</li>
      * <li>If amount is has more than two decimal points, return false.</li>
+     * <li> most of my code review reevals were making this method's tests more robust since it's used throughout the public methods
      */
     public static boolean isAmountValid(double amount) {
         if (amount < 0) {
             return false;
         } 
-        String amountStr = Double.toString(Math.abs(amount));
-        int integerPlaces = amountStr.indexOf('.');
+        String amountStr = Double.toString(Math.abs(amount)); // converts amount to string
+        int integerPlaces = amountStr.indexOf('.'); // gets index of string where decimal is
+
+        // if length is greater than decimal index by 2, too many decimals are present
+        // also checks for modulo 1 for integers with lots of leading zeroes (i.e. 10.0000)
         if (((amountStr.length() - integerPlaces - 1) > 2) && (amount%1!=0))  {
             return false;
         }
@@ -96,10 +100,13 @@ public class BankAccount {
     }
 
     public static boolean isEmailValid(String email){
-        if (hasAdjacentSymbols(email)) {
+        
+        if (hasAdjacentSymbols(email)) { // checks for invalid symbol usage that passes through the regex
+            // see private methods for implementation
             return false;
         }
 
+        // partner implemented but highly functional
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
                             "[a-zA-Z0-9_+&*-]+)*@" +
                             "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
@@ -111,13 +118,19 @@ public class BankAccount {
         return pat.matcher(email).matches();
     }
 
-    private static boolean hasAdjacentSymbols(String email) {
-        for (int i=0; i<email.length(); i++) {
-            if (!isLetter(email.codePointAt(i))) { // if char at i is not letter
-                if (i==0 || i==email.length()-1) { // bad char at first or last letter
+    /**
+     * @param myStr
+     * @post HELPER FUNCTION : scrubs myStr to find adjacent non-letters
+     * @return false if no adjacent symbols detected
+     * <li>true is they ARE detected
+     */
+    private static boolean hasAdjacentSymbols(String myStr) {
+        for (int i=0; i<myStr.length(); i++) {
+            if (!isLetter(myStr.codePointAt(i))) { // if char at i is not letter
+                if (i==0 || i==myStr.length()-1) { // bad char at first or last letter
                     return true;
                 }
-                if (!isLetter(email.codePointAt(i+1))) { // if next char is also not letter
+                if (!isLetter(myStr.codePointAt(i+1))) { // if next char is also a bad char
                     return true;
                 }
             }
@@ -125,6 +138,12 @@ public class BankAccount {
         return false;
     }
 
+    /**
+     * @param int codePoint
+     * @post HELPER FUNCTION : checks ASCII value of provided integer
+     * @return true if param is a letter 
+     * <li>false if param is NOT a letter
+     */
     private static boolean isLetter(int codePoint) {
         if (codePoint >= 65 && codePoint <= 90) { // if codePoint is capital letter
             return true;
